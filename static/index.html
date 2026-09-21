@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dayline — интерактивный прототип</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/dayline.css">
+</head>
+<body>
+  <div class="stage">
+    <aside class="stage-panel">
+      <p class="eyebrow">Веб-прототип · Expo preview</p>
+      <h1 class="stage-brand">Dayline</h1>
+      <p class="stage-lead">
+        Habitify + Todoist + 7 намазных окон дня (namozvaqti · Toshkent).
+        Кликайте по блокам, отмечайте задачи и привычки внутри телефона.
+      </p>
+
+      <div class="controls">
+        <button type="button" class="chip" id="themeToggle" aria-pressed="false">Тёмная тема</button>
+        <button type="button" class="chip chip-accent" id="sourceToggle" data-source="mock">Источник: Mock</button>
+      </div>
+
+      <ul class="hints">
+        <li>Таб «День» — активный блок и countdown</li>
+        <li>Свайп/клик по 7 чипам намаза</li>
+        <li>Задачи P1–P4 и стрики привычек</li>
+      </ul>
+
+      <p class="api-note" id="apiNote">Mock-режим · API не обязателен</p>
+      <a class="docs-link" href="/docs" target="_blank" rel="noopener">Swagger /docs</a>
+    </aside>
+
+    <div class="phone-wrap">
+      <div class="phone" role="application" aria-label="Dayline mobile prototype">
+        <div class="phone-notch" aria-hidden="true"></div>
+        <div class="phone-screen">
+          <header class="app-status">
+            <span id="clock">09:41</span>
+            <span class="status-dots" aria-hidden="true"></span>
+          </header>
+
+          <main class="app-body" id="appBody">
+            <!-- filled by JS -->
+          </main>
+
+          <nav class="tabbar" aria-label="Основные разделы">
+            <button type="button" class="tab is-active" data-tab="day">
+              <span class="tab-ico" aria-hidden="true"></span>
+              День
+            </button>
+            <button type="button" class="tab" data-tab="tasks">
+              <span class="tab-ico" aria-hidden="true"></span>
+              Задачи
+            </button>
+            <button type="button" class="tab" data-tab="habits">
+              <span class="tab-ico" aria-hidden="true"></span>
+              Привычки
+            </button>
+          </nav>
+
+          <div class="task-modal" id="taskModal" hidden>
+            <div class="task-modal-sheet" role="dialog" aria-labelledby="taskModalTitle">
+              <header class="task-modal-head">
+                <button type="button" class="task-modal-link" id="taskModalCancel">Отмена</button>
+                <h3 id="taskModalTitle">Задача</h3>
+                <button type="button" class="task-modal-link accent" id="taskModalSave">Сохранить</button>
+              </header>
+              <div class="task-modal-body">
+                <input type="text" id="taskEditTitle" class="task-edit-title" placeholder="Название задачи" maxlength="120">
+                <label class="task-field-label" for="taskEditNotes">Описание</label>
+                <textarea id="taskEditNotes" class="task-edit-notes" rows="3" placeholder="Заметки, контекст…"></textarea>
+
+                <p class="task-field-label">Дата и время</p>
+                <div class="datetime-row">
+                  <label class="datetime-field">
+                    <span>Дата</span>
+                    <input type="date" id="taskEditDate">
+                  </label>
+                  <label class="datetime-field">
+                    <span>Время</span>
+                    <input type="time" id="taskEditTime">
+                  </label>
+                  <button type="button" class="datetime-clear" id="taskEditClearTime" title="Без точного времени">×</button>
+                </div>
+
+                <p class="task-field-label">Приоритет</p>
+                <div class="prio-row" id="taskEditPriority" role="group" aria-label="Приоритет">
+                  <button type="button" class="prio-btn" data-prio="1"><i></i>P1</button>
+                  <button type="button" class="prio-btn" data-prio="2"><i></i>P2</button>
+                  <button type="button" class="prio-btn" data-prio="3"><i></i>P3</button>
+                  <button type="button" class="prio-btn" data-prio="4"><i></i>P4</button>
+                </div>
+
+                <p class="task-field-label">Блок дня</p>
+                <div class="block-pick" id="taskEditBlock"></div>
+
+                <p class="task-field-label">Тип</p>
+                <div class="type-pick" id="taskEditType" role="group" aria-label="Тип задачи">
+                  <button type="button" class="pick-btn" data-type="call">📞 Звонок</button>
+                  <button type="button" class="pick-btn" data-type="meeting">👥 Встреча</button>
+                  <button type="button" class="pick-btn" data-type="task">💻 Задача</button>
+                  <button type="button" class="pick-btn" data-type="focus">🎯 Фокус</button>
+                </div>
+
+                <p class="task-field-label">Вектор</p>
+                <div class="vector-pick" id="taskEditVector" role="group" aria-label="Вектор">
+                  <button type="button" class="pick-btn" data-vector="work">🏢 Рабочее</button>
+                  <button type="button" class="pick-btn" data-vector="personal">👤 Личное</button>
+                  <button type="button" class="pick-btn" data-vector="growth">🚀 Развитие</button>
+                  <button type="button" class="pick-btn" data-vector="home">🏠 Быт / Дом</button>
+                </div>
+
+                <p class="task-field-label">Чек-лист</p>
+                <div class="subtask-list" id="taskEditSubtasks"></div>
+                <div class="subtask-add">
+                  <input type="text" id="taskEditSubInput" placeholder="Добавить подзадачу" maxlength="100">
+                  <button type="button" id="taskEditSubAdd" aria-label="Добавить">+</button>
+                </div>
+
+                <button type="button" class="task-delete" id="taskModalDelete" hidden>Удалить задачу</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="task-modal" id="habitModal" hidden>
+            <div class="task-modal-sheet" role="dialog" aria-labelledby="habitModalTitle">
+              <header class="task-modal-head">
+                <button type="button" class="task-modal-link" id="habitModalCancel">Отмена</button>
+                <h3 id="habitModalTitle">Привычка</h3>
+                <button type="button" class="task-modal-link accent" id="habitModalSave">Сохранить</button>
+              </header>
+              <div class="task-modal-body">
+                <div class="habit-icon-row">
+                  <button type="button" class="habit-icon-pick" id="habitIconPick" title="Выбрать иконку">
+                    <span id="habitIconPreview">✨</span>
+                    <small>Иконка</small>
+                  </button>
+                  <input type="text" id="habitEditTitle" class="task-edit-title habit-title-input" placeholder="Название (taxorat…)" maxlength="80">
+                </div>
+                <div class="habit-icon-sheet" id="habitIconSheet" hidden>
+                  <p class="task-field-label">Выбрать иконку</p>
+                  <div class="habit-icon-cats" id="habitIconCats"></div>
+                  <div class="habit-icon-grid" id="habitIconGrid"></div>
+                </div>
+                <label class="task-field-label" for="habitEditNotes">Описание</label>
+                <textarea id="habitEditNotes" class="task-edit-notes" rows="3" placeholder="Контекст, мотивация…"></textarea>
+
+                <p class="task-field-label">Блок дня</p>
+                <div class="block-pick" id="habitEditBlock"></div>
+
+                <p class="task-field-label">Временной триггер</p>
+                <div class="type-pick" id="habitEditTiming" role="group">
+                  <button type="button" class="pick-btn" data-timing="first_20">Первые 20 мин</button>
+                  <button type="button" class="pick-btn" data-timing="last_20">За 20 мин до конца</button>
+                  <button type="button" class="pick-btn" data-timing="after_15">Через 15 мин</button>
+                  <button type="button" class="pick-btn" data-timing="anytime">В течение блока</button>
+                </div>
+
+                <p class="task-field-label">Уровень важности</p>
+                <div class="vector-pick" id="habitEditLevel" role="group">
+                  <button type="button" class="pick-btn" data-habit-level="1">🔴 Критично</button>
+                  <button type="button" class="pick-btn" data-habit-level="2">🟠 Важно</button>
+                  <button type="button" class="pick-btn" data-habit-level="3">🔵 Рекомендовано</button>
+                  <button type="button" class="pick-btn" data-habit-level="4">⚪ Желательно</button>
+                </div>
+                <p class="task-field-hint">Критично ×3 XP · Желательно ×1 · штраф пропорционален</p>
+
+                <p class="task-field-label">Вектор</p>
+                <div class="vector-pick" id="habitEditVector" role="group">
+                  <button type="button" class="pick-btn" data-habit-vector="spiritual">🕌 Духовное</button>
+                  <button type="button" class="pick-btn" data-habit-vector="health">💚 Здоровье</button>
+                  <button type="button" class="pick-btn" data-habit-vector="growth">🚀 Развитие</button>
+                </div>
+
+                <button type="button" class="task-delete" id="habitModalDelete" hidden>Удалить привычку</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-home" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/dayline.js" defer></script>
+</body>
+</html>

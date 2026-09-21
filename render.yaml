@@ -1,0 +1,23 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Deploy: connect repo → New → Blueprint → render.yaml
+services:
+  - type: web
+    name: dayline-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:////tmp/dayline.db
+      - key: APP_HOST
+        value: "0.0.0.0"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "https://dayline-app.web.app,https://dayline-app.firebaseapp.com,*"
+      - key: DEFAULT_REGION
+        value: toshkent
+      - key: TIMEZONE
+        value: Asia/Tashkent

@@ -1,0 +1,78 @@
+{
+  "hosting": {
+    "public": "hosting/public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=300"
+          }
+        ]
+      },
+      {
+        "source": "index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "run": {
+          "serviceId": "dayline-api",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/health",
+        "run": {
+          "serviceId": "dayline-api",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/docs",
+        "run": {
+          "serviceId": "dayline-api",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/docs/**",
+        "run": {
+          "serviceId": "dayline-api",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/openapi.json",
+        "run": {
+          "serviceId": "dayline-api",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "/redoc",
+        "run": {
+          "serviceId": "dayline-api",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

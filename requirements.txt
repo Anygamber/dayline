@@ -1,0 +1,12 @@
+# Dayline API — pinned for reproducible cloud builds (Render / Railway)
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+sqlalchemy==2.0.54
+httpx==0.28.1
+beautifulsoup4==4.15.0
+pydantic==2.13.5
+pydantic-settings==2.15.0
+python-dateutil==2.9.0.post0
+tzdata==2026.4
+PyJWT==2.14.0
+bcrypt>=4.0.0,<5
