@@ -107,6 +107,8 @@ class TimelineService:
                         title=habit.title,
                         description=habit.description,
                         is_done=tracking.is_done,
+                        status=(tracking.status or ("done" if tracking.is_done else "pending")),
+                        is_skipped=(tracking.status or "") == "skipped",
                         note=tracking.note,
                         timing_mode=habit.timing_mode or "anytime",
                         start_offset_minutes=habit.start_offset_minutes,
@@ -208,6 +210,7 @@ class TimelineService:
                         interval_id=interval.id,
                         date=on_date,
                         is_done=False,
+                        status="pending",
                     )
                 )
                 existing.add(key)

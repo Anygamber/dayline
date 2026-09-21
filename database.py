@@ -39,3 +39,6 @@ def init_db() -> None:
     from models import day_interval, habit, prayer_time  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
+    from database_migrate import migrate_schema
+
+    migrate_schema()

@@ -69,6 +69,8 @@ class HabitTracking(Base):
     )
     date: Mapped[date] = mapped_column(Date, nullable=False, index=True)
     is_done: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    # pending | done | skipped — additive; NULL/missing treated via is_done for legacy rows
+    status: Mapped[str | None] = mapped_column(String(16), nullable=True, default="pending")
     note: Mapped[str | None] = mapped_column(Text, nullable=True)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

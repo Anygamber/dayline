@@ -28,6 +28,8 @@ class HabitItemOut(BaseModel):
     title: str
     description: str | None = None
     is_done: bool
+    status: str = "pending"
+    is_skipped: bool = False
     note: str | None = None
     timing_mode: str = "anytime"
     start_offset_minutes: int | None = None
